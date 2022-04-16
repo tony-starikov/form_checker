@@ -49,14 +49,14 @@
               <h4 id="sex_error"></h4>
 
               <div class="form-check mb-3">
-                <input v-model="gentleman" class="form-check-input" type="radio" name="sex" id="GENTLEMAN">
+                <input v-model="gender" value="0" class="form-check-input" type="radio" name="sex" id="GENTLEMAN">
                 <label class="form-check-label" for="GENTLEMAN">
                   GENTLEMAN
                 </label>
               </div>
 
               <div class="form-check mb-3">
-                <input v-model="lady" class="form-check-input" type="radio" name="sex" id="LADY">
+                <input v-model="gender" value="1" class="form-check-input" type="radio" name="sex" id="LADY">
                 <label class="form-check-label" for="LADY">
                   LADY
                 </label>
@@ -76,7 +76,7 @@
                 <label for="floatingInput">NICKNAME</label>
               </div>
 
-              <button @click="checkForm" type="submit" class="btn btn-primary w-100 mt-3">CHECK</button>
+              <button @click.prevent="checkForm" type="submit" class="btn btn-primary w-100 mt-3">CHECK</button>
             </form>
             
           </div>
@@ -95,43 +95,66 @@
           return {
             name: '',
             surname: '',
-            gentleman: false,
-            lady: false,
+            gender: false,
             phone: '',
-            phone_regex: /^\+?([0-9]{4})\)?([0-9]{8})$/,
             nickname: '',
-            nick_regex: /^([a-zA-z]+)\)?([0-9]{3})$/,
             colorClass: ''
           }
         },
         methods:{
           checkForm() {
-            if (this.lady === 'on' && this.gentleman === false) {
+            if (this.gender === '1') {
               this.colorClass = 'color_for_lady';
-            } else if (this.lady === false && this.gentleman === 'on') {
+            } else if (this.gender === '0') {
               this.colorClass = 'color_for_gentleman';
-            } else if (this.lady === false && this.gentleman === false) {
+            } else {
               document.getElementById('sex_error').innerText = 'CHOOSE ONE';
+              setTimeout(function () {
+                document.getElementById('sex_error').innerText = '';
+              }, 5000);
             }
 
             if (parseInt(this.name.length) < 2) {
               document.getElementById('name_error').innerText = 'NAME MUST BE LONGER THEN 1 SYMBOL';
+              setTimeout(function () {
+                document.getElementById('name_error').innerText = '';
+              }, 5000);
             }
 
             if (parseInt(this.surname.length) < 2) {
               document.getElementById('surname_error').innerText = 'SURNAME MUST BE LONGER THEN 1 SYMBOL';
+              setTimeout(function () {
+                document.getElementById('surname_error').innerText = '';
+              }, 5000);
             }
 
-            if (!this.phone.match(this.phone_regex)) {
+            if (!/^\+([0-9]{4})\)?([0-9]{8})$/.test(this.phone)) {
               document.getElementById('phone_error').innerText = 'PHONE MUST BE LIKE +XXXXXXXXXXXX';
+              setTimeout(function () {
+                document.getElementById('phone_error').innerText = '';
+              }, 5000);
             }
 
-            if (!this.nickname.match(this.nick_regex)) {
+            if (!/[0-9]{3}$/.test(this.nickname)) {
               document.getElementById('nickname_error').innerText = 'NICKNAME MUST CONTAIN 3 NUMBERS IN THE END';
-            } else if(!this.nickname.includes(".")) {
+              setTimeout(function () {
+                document.getElementById('nickname_error').innerText = '';
+              }, 5000);
+            } else if(!this.nickname.includes('.')) {
               document.getElementById('nickname_error').innerText = 'NICKNAME MUST CONTAIN .';
-            } else if(!!this.nickname.match(/([A-Z])\)/)) {
+              setTimeout(function () {
+                document.getElementById('nickname_error').innerText = '';
+              }, 5000);
+            } else if(!this.nickname.includes('_')) {
+              document.getElementById('nickname_error').innerText = 'NICKNAME MUST CONTAIN _';
+              setTimeout(function () {
+                document.getElementById('nickname_error').innerText = '';
+              }, 5000);
+            } else if(!/[A-Z]/.test(this.nickname)) {
               document.getElementById('nickname_error').innerText = 'NICKNAME MUST CONTAIN UPPER CASE LETTER';
+              setTimeout(function () {
+                document.getElementById('nickname_error').innerText = '';
+              }, 5000);
             }
           }
         }
